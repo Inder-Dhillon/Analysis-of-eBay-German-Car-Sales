@@ -62,4 +62,25 @@ print("\nThe registeration years of the cars posted on ebay can be visualized as
       "\nSame can be seen below:")
 print(cars["registeration_year"].value_counts(normalize=True).sort_index(ascending=True)[40:])
 
+print('\n')
+print("Volkswagen is the most auctioned car. German manufactuers are in the top 5 brands sold. Same can be seen below:")
+
+#Analyzing brand specific mileage and price
+print(cars["brand"].value_counts(normalize=True)[:10])
+brand_list= cars["brand"].value_counts(normalize=True).index[:10]
+agg_brand_price = {}
+agg_brand_mileage = {}
+for brand_name in brand_list:
+    brand_filtered = cars[cars["brand"]==brand_name]
+    agg_brand_mileage[brand_name] = int(brand_filtered["odometer_km"].mean())
+    agg_brand_price[brand_name] = int(brand_filtered["price"].mean())
+print("\nGerman brands are more expensive and American Brands like Ford are cheaper. Volkswagen is a good balance which could be the reason for it's popularity.")
+print("The cost of German brands can be justified with their good mileage numbers. However, Opel offers the best 'bang for buck value' when it comes to mileage. Same can be seen below:")
+abp_series = pd.Series(agg_brand_price).sort_values(ascending=False)
+abm_series = pd.Series(agg_brand_mileage).sort_values(ascending=False)
+agg_df = pd.DataFrame(abp_series,columns=["price"])
+agg_df["mileage"] = abm_series
+print(agg_df)
+
+
 
